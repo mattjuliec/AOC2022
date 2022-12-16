@@ -1,18 +1,38 @@
+// compile flags -  clang++ -std=c++11 -c -o dayone dayone.cpp
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <regex>
+#include <list>
+
 using namespace std;
 int main(){
-   fstream newfile;
-   newfile.open("../input.txt",ios::in); //open a file to perform read operation using file object
-
+   fstream INFILE;
+   INFILE.open("../input.txt",ios::in); \
+   list<int> elves;
    int count=0;
-   if (newfile.is_open()){ //checking whether the file is open
+   int calories = 0;
+   elves.push_front(0);
+   if (INFILE.is_open()){ //checking whether the file is open
       string tp;
-      while(getline(newfile, tp)){ //read data from file object and put it into string.
-        
-         cout << tp << "\n"; //print the data of the string
+      while(getline(INFILE, tp)){ //read data from file object and put it into string.
+        //if (regex_match (tp, regex("-?(0|[1-9]\\d*)") )){
+        if (regex_match (tp, regex("[[:digit:]]+") )){
+           calories = stoi(tp);
+            //cout << calories << "\n"; 
+            count = count+calories;
+        }
+        else{
+            for (int x : elves) { // auto sort the list as new entries go in
+                if(calories>=x){
+                    elves.push_back(calories);
+                    break;
+                }
+		        std::cout << x << '\n';
+	        }
+            count=0;
+        }
       }
-      newfile.close(); //close the file object.
+      INFILE.close(); //close the file object.
    }
 }
