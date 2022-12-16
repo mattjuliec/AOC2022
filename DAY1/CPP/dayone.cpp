@@ -1,4 +1,4 @@
-// compile flags -  clang++ -std=c++11 -c -o dayone dayone.cpp
+// compile flags -  clang++ -std=c++11 -o dayone dayone.cpp
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -10,29 +10,33 @@ int main(){
    fstream INFILE;
    INFILE.open("../input.txt",ios::in); \
    list<int> elves;
+   list<int>::iterator iter;
    int count=0;
    int calories = 0;
-   elves.push_front(0);
+   int val;
+   //elves.push_front(0);
    if (INFILE.is_open()){ //checking whether the file is open
       string tp;
-      while(getline(INFILE, tp)){ //read data from file object and put it into string.
-        //if (regex_match (tp, regex("-?(0|[1-9]\\d*)") )){
+      while(getline(INFILE, tp)){ 
         if (regex_match (tp, regex("[[:digit:]]+") )){
            calories = stoi(tp);
-            //cout << calories << "\n"; 
-            count = count+calories;
+           count = count+calories;
         }
         else{
-            for (int x : elves) { // auto sort the list as new entries go in
-                if(calories>=x){
-                    elves.push_back(calories);
-                    break;
-                }
-		        std::cout << x << '\n';
-	        }
+            elves.push_front(count);
             count=0;
         }
+        }
+        
+      } 
+      elves.sort();
+      count = 0;
+      for (int i=1;i<=3;i++){
+        val = elves.back();
+        elves.pop_back();
+        cout << val << endl;
+        count = count + val;        
       }
+      cout << count << endl;
       INFILE.close(); //close the file object.
-   }
 }
